@@ -113,4 +113,5 @@ struct TodoListView: View {
 }
 #Preview {
     LandingView()
+        .modelContainer(TodoItem.preview)
 }
