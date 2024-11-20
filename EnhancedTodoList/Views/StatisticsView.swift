@@ -14,5 +14,5 @@ struct StatisticsView: View {
 }
 
 #Preview {
-    StatisticsView()
+    LandingView(selectedTab: 2)
 }
