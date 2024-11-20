@@ -5,17 +5,21 @@
 //  Created by Yiren LIU on 2024-11-12.
 //
 
+import SwiftData
 import SwiftUI
 
 struct TodoListView: View {
     
     // MARK: Stored properties
     
+    // Access the model context so we can "CRUD" data
+    @Environment(\.modelContext) private var modelContext
+    
     // The item currently being created
     @State private var newItemDetails = ""
     
-    // Our list of items to complete
-    @State private var items: [TodoItem] = []
+    // Run a query to obtain the list of to-do items
+    @Query private var items: [TodoItem]
     
     // The search text provided by the user
     @State var searchText = ""
@@ -82,18 +86,12 @@ struct TodoListView: View {
 
             .navigationTitle("Tasks")
         }
-        .onAppear {
-            // Populate with example data
-            if items.isEmpty {
-                items.append(contentsOf: exampleData)
-            }
-        }
     }
   
     // MARK: Functions
     func addItem() {
         let newToDoItem = TodoItem(details: newItemDetails)
-        items.insert(newToDoItem, at: 0)
+        modelContext.insert(newToDoItem)
         newItemDetails = ""
     }
     
@@ -108,7 +106,9 @@ struct TodoListView: View {
 
     }
     func delete(at offsets: IndexSet) {
-        items.remove(atOffsets: offsets)
+        for offset in offsets {
+            modelContext.delete(items[offset])
+        }
     }
 }
 #Preview {
